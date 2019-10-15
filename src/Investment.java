@@ -13,18 +13,54 @@ public class Investment
 	{
 		this.theContributions.add(c);
 	}
-	
+	double addInterest(double existingValue)
+	{
+		return existingValue + (existingValue * (.0067));
+	}
+	double contributionsPresent(int month)
+	{
+		double included = 0;
+		for(int i = 0; i < theContributions.size(); i = i + 1)
+		{
+			Contribution a = theContributions.get(i);
+			if(month >= a.monthNumber)
+			{
+				included = included + a.amount;
+			}
+			if(month < a.monthNumber)
+			{
+				return included;
+			}
+		}
+		return included;
+	}
 	double getCurrentValue(int afterHowManyMonth)
 	{
-		//return the current value of this investment taking
-		//time and an average 8% yearly or 0.67% monthly return
-		//over afterHowManyMonths number of months
+		double currentValue = 0;
+		double contributions = 0;
+		
+		for(int i = 0; i < afterHowManyMonth; i = i + 1)
+		{
+			if(contributions < contributionsPresent(i+1))
+			{
+				currentValue = currentValue + (contributionsPresent(i+1) - contributions);
+				contributions = contributionsPresent(i+1);
+			}
+			currentValue = addInterest(currentValue);
+			System.out.println(currentValue);
+		}
+		return currentValue;
 	}
-	
+
 	double getTotalContributions()
 	{
-		//return the total amount ever investment not taking into
-		//account interest.
+		double total = 0;
+		for(int i = 0; i < theContributions.size(); i = i + 1)
+		{
+			Contribution b = theContributions.get(i);
+			total = total + b.amount;
+		}
+		return total;
 	}
 	
 }
